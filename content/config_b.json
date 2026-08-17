@@ -1,0 +1,51 @@
+{
+  "application": {
+    "name": "Inventory Service",
+    "version": "2.5.0",
+    "environment": "staging",
+    "debug": false
+  },
+  "server": {
+    "host": "api.example.com",
+    "port": 8443,
+    "protocol": "https",
+    "timeout_seconds": 30
+  },
+  "database": {
+    "engine": "postgresql",
+    "host": "db-stage-01.internal",
+    "port": 5432,
+    "name": "inventory",
+    "pool_size": 10,
+    "ssl_enabled": true,
+    "read_replica_enabled": true
+  },
+  "authentication": {
+    "provider": "oauth2",
+    "token_expiration_minutes": 45,
+    "mfa_required": true
+  },
+  "features": {
+    "enable_bulk_import": true,
+    "enable_audit_log": false,
+    "enable_new_search": true
+  },
+  "logging": {
+    "level": "DEBUG",
+    "format": "json",
+    "retention_days": 30
+  },
+  "allowed_regions": [
+    "us-east-1",
+    "us-west-2"
+  ],
+  "notifications": {
+    "email_enabled": true,
+    "slack_enabled": true,
+    "alert_threshold": 5
+  },
+  "maintenance": {
+    "window": "Sunday 02:00 UTC",
+    "automatic_restart": true
+  }
+}
