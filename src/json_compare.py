@@ -19,12 +19,13 @@ def start_compare(source_1, source_2):
     if data_1 != data_2:
         print("Differences found")
         return_data_1, return_data_2 = key_diff_finder(data_1, data_2)
-        value_diff_finder(return_data_1, return_data_2)
+        diff_dict = value_diff_finder(return_data_1, return_data_2)
+        return False
     else:
         print("Files are the same")
+        return True
 
 def key_diff_finder(file1, file2):
-    print("Brrrr... starting key diff engine")
     missing_keys_file1 = []
     missing_keys_file2 = []
     return_dict_1 = {}
@@ -53,16 +54,25 @@ def key_diff_finder(file1, file2):
         
 
 def value_diff_finder(input1, input2):
-    
+    return_dict_1 = {}
+    return_dict_2 = {}
+
     for key, value in input1.items():
         value1 = input1[key]
         value2 = input2[key]
 
         if isinstance(value1, dict) and isinstance(value2, dict):
-            value_diff_finder(value1, value2)
+             child_return_1 = value_diff_finder(value1, value2)
+             return_dict_1[key] = child_return_1
         else:
             if value1 != value2:
-                print(f"{value1} does not equal {value2}")
+                return_dict_1[key] = {
+                    "file1_value": value1,
+                    "file2_value": value2
+                    }
+
+    return return_dict_1
+                
             
     
         
