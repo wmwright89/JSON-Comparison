@@ -18,8 +18,8 @@ def start_compare(source_1, source_2):
 
     if data_1 != data_2:
         print("Differences found")
-        key_diff_finder(data_1, data_2)
-       # value_diff_finder(key_diff_finder(data_1, data_2))
+        return_data_1, return_data_2 = key_diff_finder(data_1, data_2)
+        value_diff_finder(return_data_1, return_data_2)
     else:
         print("Files are the same")
 
@@ -32,25 +32,37 @@ def key_diff_finder(file1, file2):
     
     for key, value in file1.items():
         if key not in file2:
-            print(f"file 1 key not found {key}")
             missing_keys_file1.append(key)
         else:
             file1_value = file1[key]
             file2_value = file2[key]
             if isinstance(file1_value, dict) and isinstance(file2_value, dict):
-                key_diff_finder(file1_value, file2_value)
+                child_return_1, child_return_2 = key_diff_finder(file1_value, file2_value)
+                return_dict_1[key] = child_return_1
+                return_dict_2[key] = child_return_2
+            else:
+                return_dict_1[key] = file1_value
+                return_dict_2[key] = file2_value 
 
     for key, value in file2.items():
-        if key not in file1:
-            print(f"file 2 key not found {key}")
-            missing_keys_file2.append(key)            
+        if key not in file1: 
+            missing_keys_file2.append(key)
+
+
+    return return_dict_1, return_dict_2
         
 
-def value_diff_finder(matching_sets):
-    dict_1, dict_2 = matching_sets
+def value_diff_finder(input1, input2):
     
-    for key, value in dict_1.items():
-        if value not in dict_2.items():
-            print(f"Value: {value} not in dict 2")
+    for key, value in input1.items():
+        value1 = input1[key]
+        value2 = input2[key]
+
+        if isinstance(value1, dict) and isinstance(value2, dict):
+            value_diff_finder(value1, value2)
+        else:
+            if value1 != value2:
+                print(f"{value1} does not equal {value2}")
+            
     
         
