@@ -20,7 +20,7 @@ def start_compare(source_1, source_2):
         print("Differences found")
         return_data_1, return_data_2 = key_diff_finder(data_1, data_2)
         diff_dict = value_diff_finder(return_data_1, return_data_2)
-        return False
+        return diff_dict
     else:
         print("Files are the same")
         return True
