@@ -48,7 +48,9 @@ class TestExtract(unittest.TestCase):
         file1 = {"name": "Macho Man", "role": "Professional Wrestler", "title": "Intercontinental Champion"}
         file2 = {"name": "Macho Man", "role": "Professional Wrestler", "title": "Intercontinental Champion"}
 
-        result1, result2 = key_diff_finder(file1, file2)
+        missing_keys = {"file1": [], "file2": []}
+
+        result1, result2, missing_keys = key_diff_finder(file1, file2, missing_keys, path="")
         self.assertEqual(result1, file1)
         self.assertEqual(result2, file2)
 
@@ -57,7 +59,9 @@ class TestExtract(unittest.TestCase):
         file1 = {"name": "John Cena", "role": "Professional Wrestler", "title": "WWE Heavy Weight Champion", "catch phrase": "You can't see me"}
         file2 = {"name": "Stone Cold Steve Austin", "role": "Professional Wrestler", "title": "WWE Heavy Weight Champion", "catch phrase": "WHAT", "beer": "Yes"}
 
-        result1, result2 = key_diff_finder(file1, file2)
+        missing_keys = {"file1": [], "file2": []}
+
+        result1, result2, missing_keys = key_diff_finder(file1, file2, missing_keys, path="")
         self.assertEqual(result1, file1)
         self.assertEqual(result2, {"name": "Stone Cold Steve Austin", "role": "Professional Wrestler", "title": "WWE Heavy Weight Champion", "catch phrase": "WHAT"})
 
@@ -99,7 +103,9 @@ class TestExtract(unittest.TestCase):
             }
         }
 
-        result1, result2 = key_diff_finder(file1, file2)
+        missing_keys = {"file1": [], "file2": []}
+
+        result1, result2, missing_keys = key_diff_finder(file1, file2, missing_keys, path="")
         self.assertEqual(result1, file1)
         self.assertEqual(result2, file1)
 
@@ -118,6 +124,8 @@ class TestExtract(unittest.TestCase):
                 "nickname": "Dude Love"
             }
         }
+
+        missing_keys = {"file1": [], "file2": []}
 
         result = value_diff_finder(file1, file2)
         expected = {

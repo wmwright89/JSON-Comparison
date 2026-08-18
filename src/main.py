@@ -11,7 +11,7 @@ def main():
 
     verifyJSON(json_1, json_2)
     diff_dict = {}
-    diff_dict = start_compare(json_1, json_2)
+    diff_dict, missing_keys = start_compare(json_1, json_2)
     
     destination = "output"
     if not os.path.exists(destination):
@@ -24,8 +24,8 @@ def main():
             else:
                 shutil.rmtree(full_path)
 
-    if diff_dict != {}:
-        convert_dict_to_markdown(diff_dict, destination, depth=1)
+    if diff_dict != {} or missing_keys != {}:
+        convert_dict_to_markdown(diff_dict, missing_keys, destination, depth=1)
 
 
 if __name__ == "__main__":

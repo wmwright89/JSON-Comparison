@@ -1,7 +1,7 @@
 import unittest
 import tempfile
 import os
-from markdown_convert import convert_dict_to_markdown, set_md_heading
+from markdown_convert import convert_dict_to_markdown, set_md_heading, write_missing_keys
 
 class TestMarkdownConversion(unittest.TestCase):
 
@@ -15,8 +15,10 @@ class TestMarkdownConversion(unittest.TestCase):
             }
         }
 
+        missing_keys = {}
+
         with tempfile.TemporaryDirectory() as temp_dir:
-            convert_dict_to_markdown(diff_dict, temp_dir, depth=1)
+            convert_dict_to_markdown(diff_dict, missing_keys, temp_dir, depth=1)
 
             output_path = os.path.join(temp_dir, "json_comparison.md")
 
@@ -26,9 +28,11 @@ class TestMarkdownConversion(unittest.TestCase):
             expected = """# JSON Comparison
 
 
-## application
+## Value Differences
 
-### version
+### application
+
+#### version
 - file1_value: 2.4.1
 - file2_value: 2.5.0"""
 
@@ -54,8 +58,11 @@ class TestMarkdownConversion(unittest.TestCase):
             }
         }
 
+        missing_keys = {}
+        
+
         with tempfile.TemporaryDirectory() as temp_dir:
-            convert_dict_to_markdown(diff_dict, temp_dir, depth=1)
+            convert_dict_to_markdown(diff_dict, missing_keys, temp_dir, depth=1)
 
             output_path = os.path.join(temp_dir, "json_comparison.md")
 
@@ -65,19 +72,21 @@ class TestMarkdownConversion(unittest.TestCase):
             expected = """# JSON Comparison
 
 
-## application
+## Value Differences
 
-### environment
+### application
+
+#### environment
 - file1_value: production
 - file2_value: staging
 
-## server
+### server
 
-### port
+#### port
 - file1_value: 443
 - file2_value: 8443
 
-## allowed_regions
+### allowed_regions
 - file1_value:
   - us-east-1
   - us-west-2
@@ -87,4 +96,30 @@ class TestMarkdownConversion(unittest.TestCase):
   - us-west-2"""
 
         self.assertEqual(result, expected)
-    
+
+
+    def test_missing_keys(self):
+        missing_keys = {
+            "file1": ["database.read_replica_enabled", "features.enable_new_search"],
+            "file2": ["features.enable_dashboard"]
+        }
+        
+        with tempfile.TemporaryDirectory() as temp_dir: 
+
+            output_path = os.path.join(temp_dir, "json_comparison.md")
+
+            write_missing_keys(missing_keys, output_path, depth=3)
+
+            with open(output_path, "r") as file:
+                result = file.read()
+
+            expected ="""
+
+### Missing from file1
+- database.read_replica_enabled
+- features.enable_new_search
+
+### Missing from file2
+- features.enable_dashboard"""
+
+        self.assertEqual(result, expected)

@@ -1,14 +1,21 @@
 import os
 
 
-def convert_dict_to_markdown(diff_dict, destination, depth):
+def convert_dict_to_markdown(diff_dict, missing_keys, destination, depth):
     
     heading = "#" * depth
     file_name = "json_comparison.md"
     full_path = os.path.join(destination, file_name)
     
     set_md_heading(heading, full_path)
-    write_dict_to_markdown(diff_dict, full_path, depth=2)
+    if missing_keys != {}:
+        with open(full_path, "a") as file:
+            file.write(f"\n## Missing Keys")
+        write_missing_keys(missing_keys, full_path, depth=3)
+    if diff_dict != {}:
+        with open(full_path, "a") as file:
+            file.write(f"\n\n## Value Differences")
+        write_dict_to_markdown(diff_dict, full_path, depth=3)
 
 def set_md_heading(heading, full_path):
     
@@ -16,6 +23,17 @@ def set_md_heading(heading, full_path):
         file.write(f"{heading} JSON Comparison\n")
 
     return
+
+def write_missing_keys(missing_keys, full_path, depth):
+    
+    for key, value in missing_keys.items():
+        heading = depth * "#"
+        with open(full_path, "a") as file:
+            file.write(f"\n\n{heading} Missing from {key}")
+        for i in value:
+            with open(full_path, "a") as file:
+                file.write(f"\n- {i}")
+
 
 def write_dict_to_markdown(value_dict, full_path, depth):
         

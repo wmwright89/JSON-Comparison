@@ -18,27 +18,30 @@ def start_compare(source_1, source_2):
 
     if data_1 != data_2:
         print("Differences found")
-        return_data_1, return_data_2 = key_diff_finder(data_1, data_2)
+        missing_keys = {
+            "file1": [],
+            "file2": []
+        }
+        return_data_1, return_data_2, missing_keys = key_diff_finder(data_1, data_2, missing_keys, path="")
         diff_dict = value_diff_finder(return_data_1, return_data_2)
-        return diff_dict
+        return diff_dict, missing_keys
     else:
         print("Files are the same")
         return True
 
-def key_diff_finder(file1, file2):
-    missing_keys_file1 = []
-    missing_keys_file2 = []
+def key_diff_finder(file1, file2, missing_keys, path):
     return_dict_1 = {}
     return_dict_2 = {}
     
     for key, value in file1.items():
+        current_path = f"{path}.{key}" if path else key
         if key not in file2:
-            missing_keys_file1.append(key)
+            missing_keys["file1"].append(current_path)
         else:
             file1_value = file1[key]
             file2_value = file2[key]
             if isinstance(file1_value, dict) and isinstance(file2_value, dict):
-                child_return_1, child_return_2 = key_diff_finder(file1_value, file2_value)
+                child_return_1, child_return_2, missing_keys = key_diff_finder(file1_value, file2_value, missing_keys, current_path)
                 return_dict_1[key] = child_return_1
                 return_dict_2[key] = child_return_2
             else:
@@ -46,11 +49,11 @@ def key_diff_finder(file1, file2):
                 return_dict_2[key] = file2_value 
 
     for key, value in file2.items():
-        if key not in file1: 
-            missing_keys_file2.append(key)
+        if key not in file1:
+            current_path = f"{path}.{key}" if path else key
+            missing_keys["file2"].append(current_path)
 
-
-    return return_dict_1, return_dict_2
+    return return_dict_1, return_dict_2, missing_keys
         
 
 def value_diff_finder(input1, input2):
