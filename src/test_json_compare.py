@@ -8,8 +8,11 @@ class TestExtract(unittest.TestCase):
         file1 = "content/config_a.json"
         file2 = "content/config_a.json"
 
-        result = start_compare(file1, file2)
-        self.assertEqual(result, True)
+        diff_dict, missing_keys = start_compare(file1, file2)
+        expected_diff_dict = {}
+        expected_missing_keys = {}
+        self.assertEqual(diff_dict, expected_diff_dict)
+        self.assertEqual(missing_keys, expected_missing_keys)
 
     #test to ensure that dictionaries are not the same
     def test_start_compate_not_eq(self):

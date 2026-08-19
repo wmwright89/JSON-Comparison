@@ -17,7 +17,6 @@ def start_compare(source_1, source_2):
         data_2 = json.load(file)
 
     if data_1 != data_2:
-        print("Differences found")
         missing_keys = {
             "file1": [],
             "file2": []
@@ -25,9 +24,10 @@ def start_compare(source_1, source_2):
         return_data_1, return_data_2, missing_keys = key_diff_finder(data_1, data_2, missing_keys, path="")
         diff_dict = value_diff_finder(return_data_1, return_data_2)
         return diff_dict, missing_keys
-    else:
-        print("Files are the same")
-        return True
+    else: 
+        diff_dict = {}
+        missing_keys = {}
+        return diff_dict, missing_keys
 
 def key_diff_finder(file1, file2, missing_keys, path):
     return_dict_1 = {}

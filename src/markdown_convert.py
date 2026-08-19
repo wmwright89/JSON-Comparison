@@ -16,6 +16,8 @@ def convert_dict_to_markdown(diff_dict, missing_keys, destination, depth):
         with open(full_path, "a") as file:
             file.write(f"\n\n## Value Differences")
         write_dict_to_markdown(diff_dict, full_path, depth=3)
+    
+    return full_path
 
 def set_md_heading(heading, full_path):
     
