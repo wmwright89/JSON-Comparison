@@ -76,7 +76,7 @@ class TestExtract(unittest.TestCase):
         self.assertEqual(result, {})
 
     #values are different
-    def test_value_diff_finder_eq(self):
+    def test_value_diff_finder_again_eq(self):
         file1 = {"name": "Scott Steiner", "nickname": "Big Poppa Pump", "brother": "Rick Steiner"}
         file2 = {"name": "Scott Steiner", "nickname": "Big Bad Booty Daddy", "brother": "Rick Steiner"}
 

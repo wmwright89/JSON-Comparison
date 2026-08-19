@@ -41,6 +41,7 @@ def write_dict_to_markdown(value_dict, full_path, depth):
         
     for key, value in value_dict.items():
         if isinstance(value, dict):
+            #Increase heading depth to mirror the nested JSON structure
             adjusted_heading = depth * "#"
             with open(full_path, "a") as file:
                 file.write(f"\n\n{adjusted_heading} {key}")
@@ -49,7 +50,6 @@ def write_dict_to_markdown(value_dict, full_path, depth):
             data_tuple = (key, value)
             write_dict_to_markdown_list(data_tuple, full_path, depth=depth+1)
         else:
-            adjusted_heading = depth * "#"
             with open(full_path, "a") as file:
                 file.write(f"\n- {key}: {value}")
 

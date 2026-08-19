@@ -33,13 +33,15 @@ def key_diff_finder(file1, file2, missing_keys, path):
     return_dict_1 = {}
     return_dict_2 = {}
     
-    for key, value in file1.items():
+    for key in file1:
         current_path = f"{path}.{key}" if path else key
         if key not in file2:
             missing_keys["file1"].append(current_path)
         else:
             file1_value = file1[key]
             file2_value = file2[key]
+            # Recursively compare nested dictionaries and preserve
+            # only keys that exist in both files
             if isinstance(file1_value, dict) and isinstance(file2_value, dict):
                 child_return_1, child_return_2, missing_keys = key_diff_finder(file1_value, file2_value, missing_keys, current_path)
                 return_dict_1[key] = child_return_1
@@ -48,7 +50,7 @@ def key_diff_finder(file1, file2, missing_keys, path):
                 return_dict_1[key] = file1_value
                 return_dict_2[key] = file2_value 
 
-    for key, value in file2.items():
+    for key in file2:
         if key not in file1:
             current_path = f"{path}.{key}" if path else key
             missing_keys["file2"].append(current_path)
@@ -58,9 +60,10 @@ def key_diff_finder(file1, file2, missing_keys, path):
 
 def value_diff_finder(input1, input2):
     return_dict_1 = {}
-    return_dict_2 = {}
-
-    for key, value in input1.items():
+    
+    #Inputs contain only shared keys after key_diff_finder()
+    #allowing values to be compared directly
+    for key in input1:
         value1 = input1[key]
         value2 = input2[key]
 

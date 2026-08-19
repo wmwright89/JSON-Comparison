@@ -6,7 +6,7 @@ import shutil
 
 def main():
     json_1 = "content/config_a.json"
-    json_2 = "content/config_a.json"
+    json_2 = "content/config_b.json"
     
     print("Starting JSON Comparison Tool")
 
@@ -15,6 +15,7 @@ def main():
     diff_dict, missing_keys = start_compare(json_1, json_2)
     
     destination = "output"
+    #Clear previous output before generating a new report
     if not os.path.exists(destination):
         os.mkdir(f"./{destination}")
     else:
