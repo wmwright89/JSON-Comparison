@@ -3,16 +3,20 @@ from json_compare import verifyJSON, start_compare
 from markdown_convert import convert_dict_to_markdown
 from difference_count import difference_count_generator
 import shutil
+import sys
 
 def main():
-    json_1 = "content/config_a.json"
-    json_2 = "content/config_b.json"
+
+    if len(sys.argv) != 3:
+        print("Error: Please provide exactly two file paths.")
+        print("Usage example: content/config_a.json content/config_b.json")
+        return
     
     print("Starting JSON Comparison Tool")
 
-    verifyJSON(json_1, json_2)
+    verifyJSON(sys.argv[1], sys.argv[2])
     
-    diff_dict, missing_keys = start_compare(json_1, json_2)
+    diff_dict, missing_keys = start_compare(sys.argv[1], sys.argv[2])
     
     destination = "output"
     #Clear previous output before generating a new report

@@ -8,6 +8,14 @@ def verifyJSON(source_1, source_2) -> bool:
     if not os.path.exists(source_2):
         raise Exception("Second file not found")
 
+    name1, extension1 = os.path.splitext(source_1)
+    if extension1.lower() != ".json":
+        raise Exception("First file is not a JSON file. Please use a JSON file")
+
+    name2, extension2 =os.path.splitext(source_2)
+    if extension2.lower() != ".json":
+        raise Exception("Second file is not a JSON file. Please use a JSON file")
+    
     return True
 
 def start_compare(source_1, source_2):
